@@ -40,8 +40,7 @@ class UserAdmin(admin.ModelAdmin):
     search_fields = ('id', 'username', 'first_name', 'last_name')
 
     def get_url(self, user: User):
-        url = user.url
-        if url:
+        if url := user.url:
             return mark_safe(f'<a href="{url}" target="_blank">link</a>')
 
     get_url.short_description = 'TG Url'

@@ -30,7 +30,7 @@ class Command(BaseCommand):
             j = schedule.every().day.at('01:00').do(delete_old)
             self.stdout.write(f"Scheduled clean up: {j}.")
         if len(schedule.jobs) == 0:
-            self.stdout.write(self.style.ERROR(f"Nothing was scheduled."))
+            self.stdout.write(self.style.ERROR("Nothing was scheduled."))
             return
 
         while True:

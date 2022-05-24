@@ -1,8 +1,7 @@
 def get_commands_help(*commands):
     for cmd in commands:
         names = ' '.join([f"/{c}" for c in cmd.handler.command])
-        docs = cmd.__doc__
-        if docs:
+        if docs := cmd.__doc__:
             docs = docs.strip()
             yield f"{names} - {docs}"
         else:

@@ -27,7 +27,7 @@ def handle_reaction_response(update: Update, context: CallbackContext):
     reaction = msg.text or (msg.sticker and msg.sticker.emoji)
 
     if reaction not in UNICODE_EMOJI:
-        msg.reply_text(f"Reaction should be a single emoji.")
+        msg.reply_text("Reaction should be a single emoji.")
         return
 
     some_message_id = redis.get_key(user.id, 'message_id')
@@ -35,7 +35,7 @@ def handle_reaction_response(update: Update, context: CallbackContext):
         message = Message.objects.prefetch_related().get(id=some_message_id)
     except Message.DoesNotExist:
         logger.debug(f"Message {some_message_id} doesn't exist.")
-        msg.reply_text(f"Received invalid message ID from /start command.")
+        msg.reply_text("Received invalid message ID from /start command.")
         return
 
     mids = message.ids
@@ -45,7 +45,7 @@ def handle_reaction_response(update: Update, context: CallbackContext):
         **mids,
     )
     if not button:
-        msg.reply_text(f"Post already has too many reactions.")
+        msg.reply_text("Post already has too many reactions.")
         return
     _, reply_markup = make_reply_markup(update, context.bot, message=message)
     context.bot.edit_message_reply_markup(reply_markup=reply_markup, **mids)

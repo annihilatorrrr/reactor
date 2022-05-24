@@ -17,4 +17,4 @@ class Command(BaseCommand):
             self.stdout.write(self.style.SUCCESS(f"Webhook was set up. Host: {truncated_hook}."))
         else:
             bot.delete_webhook()
-            self.stdout.write(self.style.WARNING(f"Webhook was removed."))
+            self.stdout.write(self.style.WARNING("Webhook was removed."))

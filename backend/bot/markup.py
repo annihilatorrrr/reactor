@@ -16,17 +16,19 @@ def get_credits(update: Update):
     }
     if msg.forward_from:
         f = msg.forward_from
-        data.update({
+        data |= {
             'forward_name': f.full_name,
             'forward_username': f.username,
-        })
+        }
+
     elif msg.forward_from_chat:
         f = msg.forward_from_chat
-        data.update({
+        data |= {
             'forward_chat_name': f.title,
             'forward_chat_username': f.username,
             'forward_chat_message_id': msg.forward_from_message_id,
-        })
+        }
+
     return data
 
 
@@ -35,19 +37,19 @@ def get_credits_from_message(message: Message):
         'from_name': message.from_user.tg.full_name,
         'from_username': message.from_user.username,
     }
-    ff = message.forward_from
-    if ff:
-        data.update({
+    if ff := message.forward_from:
+        data |= {
             'forward_name': ff.tg.full_name,
             'forward_username': ff.username,
-        })
-    ffc = message.forward_from_chat
-    if ffc:
-        data.update({
+        }
+
+    if ffc := message.forward_from_chat:
+        data |= {
             'forward_chat_name': ffc.title,
             'forward_chat_username': ffc.username,
             'forward_chat_message_id': message.forward_from_message_id,
-        })
+        }
+
     return data
 
 
@@ -63,7 +65,6 @@ def make_credits_keyboard(
     if not from_name:
         return
 
-    buttons = []
     # user
     if from_username:
         from_user_button = InlineKeyboardButton(
@@ -75,8 +76,7 @@ def make_credits_keyboard(
             f"by {from_name}",
             callback_data=EMPTY_CB_DATA,
         )
-    buttons.append(from_user_button)
-
+    buttons = [from_user_button]
     # forward user
     if forward_name and from_username != forward_username:
         if forward_username:
@@ -234,10 +234,7 @@ def make_reply_markup(
         chat.show_credits and chat.repost and not anonymous and
         (not message or not message.anonymous)
     ):
-        if message:
-            credits = get_credits_from_message(message)
-        else:
-            credits = get_credits(update)
+        credits = get_credits_from_message(message) if message else get_credits(update)
     else:
         credits = {}
 

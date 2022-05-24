@@ -21,19 +21,21 @@ logger = logging.getLogger(__name__)
 
 
 def extract_handlers(module):
-    res = []
-    for key, value in vars(module).items():
-        if isinstance(value, HandlerWrapper):
-            res.append(value)
-    return res
+    return [
+        value
+        for value in vars(module).values()
+        if isinstance(value, HandlerWrapper)
+    ]
 
 
 def inspect_handlers(handlers: List[HandlerWrapper]):
-    text = 'Handlers:\n'
-    text += '\n'.join([
-        f"  > {i + 1:2d}. {handler.module:40s} > {handler.name}"
-        for i, handler in enumerate(handlers)
-    ])
+    text = 'Handlers:\n' + '\n'.join(
+        [
+            f"  > {i + 1:2d}. {handler.module:40s} > {handler.name}"
+            for i, handler in enumerate(handlers)
+        ]
+    )
+
     logger.debug(text)
 
 

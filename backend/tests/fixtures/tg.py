@@ -108,7 +108,9 @@ def create_callback_query(user, message, data='~'):
     return {
         'id': get_id(),
         'chat_instance': get_id(),
-        'inline_message_id': message['message_id'] if not message.get('chat') else None,
+        'inline_message_id': None
+        if message.get('chat')
+        else message['message_id'],
         'message': message,
         'data': data,
         'from': user,

@@ -56,7 +56,7 @@ def get_forward_from_chat(msg: TGMessage):
 
 def clear_buttons(buttons: list, emojis=False):
     buttons = [b for b in OrderedSet(buttons) if len(b) <= settings.MAX_BUTTON_LEN]
-    if emojis and not all([b in UNICODE_EMOJI for b in buttons]):
+    if emojis and any(b not in UNICODE_EMOJI for b in buttons):
         return
     return buttons
 
@@ -91,8 +91,4 @@ def repost_message(msg: TGMessage, bot: Bot, msg_type, reply_markup):
         'video_note': bot.send_video_note,
         'sticker': bot.send_sticker,
     }
-    if msg_type in sender_map:
-        sent_msg = sender_map[msg_type](**config)
-    else:
-        sent_msg = None
-    return sent_msg
+    return sender_map[msg_type](**config) if msg_type in sender_map else None

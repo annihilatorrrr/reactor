@@ -250,8 +250,9 @@ class TestMarkupWithDB:
             from_user=User.objects.from_update(update),
             buttons=buttons,
         )
-        kb = make_reply_markup(update, bot, buttons, message=message)[1].inline_keyboard
-        return kb
+        return make_reply_markup(update, bot, buttons, message=message)[
+            1
+        ].inline_keyboard
 
     def test_make_reply_markup_inline(self):
         bot = self.create_bot()
@@ -851,7 +852,7 @@ class TestCoreCommands:
         bs = list(map(str, range(settings.MAX_NUM_BUTTONS + 1)))
         change_buttons(update, chat, bs)
         chat.refresh_from_db()
-        assert chat.buttons == []
+        assert not chat.buttons
 
     def test_change_bool(self, mocker):
         chat = self.create_chat()

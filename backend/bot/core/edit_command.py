@@ -56,7 +56,7 @@ def change_columns(update: Update, chat: Chat, values: list):
     chat.columns = option
     chat.save()
     update.message.reply_text(f"New number of buttons per row: {option}.")
-    if option in (1, 2):
+    if option in {1, 2}:
         update.message.reply_text(
             "Telegram limit for buttons is 10x10, "
             "everything beyond this limit will be truncated. "

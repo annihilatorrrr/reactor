@@ -11,18 +11,14 @@ MAGIC_MARK = regex.compile(r'^(?:\.(-|\+|~|`.*`)+|(\+\++|--))')
 def get_magic_marks(text: str):
     if not text:
         return
-    m = MAGIC_MARK.search(text)
-    if m:
+    if m := MAGIC_MARK.search(text):
         return m.captures(1) or m[2]  # list of captured values or string with special cases
 
 
 def clear_magic_marks(text: str, marks: list):
     text = text[1:]  # remove .
     s = sum(map(len, marks))
-    if len(text) > s:
-        text = text[s:]
-    else:
-        text = None
+    text = text[s:] if len(text) > s else None
     return text
 
 

@@ -20,12 +20,11 @@ class HandlerWrapper:
             logger = logging.getLogger(func.__module__)
             logger.debug(f"☎️  CALLING: {func.__name__:30s}")
             logger.debug(f"📑\n{update}")
-            if admin_required:
-                if utils.user_is_admin(context.bot, update):
-                    return func(update, context)
-                update.message.reply_text("Only admin can use this command.")
-            else:
+            if not admin_required:
                 return func(update, context)
+            if utils.user_is_admin(context.bot, update):
+                return func(update, context)
+            update.message.reply_text("Only admin can use this command.")
 
         if use_async:
             callback = run_async(callback)
